@@ -1,4 +1,4 @@
-Script für Henry: Plex Anime Serien (tvDB)
+# Rename series media files to the season+episode schema
 
 https://www.thetvdb.com/dashboard/account/apikey
 
