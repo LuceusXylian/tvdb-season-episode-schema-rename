@@ -62,7 +62,10 @@ def parse_filename_data(filename):
         if episode_number[0] == "S":
             ep_split = episode_number.split("E")
             if len(ep_split) == 2:
-                season_number = ep_split[0]
+                if ep_split[0].startswith("S"):
+                    season_number = ep_split[0][1:]
+                else:
+                    season_number = ep_split[0]
                 episode_number = ep_split[1]
 
                 if not season_number.isnumeric():

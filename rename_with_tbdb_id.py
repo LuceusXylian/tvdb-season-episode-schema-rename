@@ -1,5 +1,6 @@
 import tvdb
 import os
+import re
 
 def rename_file_with_tvdb_id(BEARER, TVDB_ID, FILE_PATH):
     if not TVDB_ID.isnumeric():
@@ -12,9 +13,10 @@ def rename_file_with_tvdb_id(BEARER, TVDB_ID, FILE_PATH):
 
     filename_data = tvdb.parse_filename_data(filename)
     if filename_data is None: return False
+    if filename_data["season_number"] is not None: return True
+    print("filename_data: ", filename_data)
     season_number = filename_data["season_number"]
     episode_number = filename_data["episode_number"]
-    series_name = filename_data["series_name"]
 
     # If the season+episode numbers are unknown then ask TVDB for it
     if season_number is None:
@@ -26,9 +28,16 @@ def rename_file_with_tvdb_id(BEARER, TVDB_ID, FILE_PATH):
 
     season_number_str = tvdb.season_zerofill(season_number)
     episode_number_str = tvdb.episode_zerofill(episode_number)
-    filename_extention = tvdb.parse_filename_extention(filename)
 
-    new_file_path = f"{filedir_path}/{series_name} {{tvdb-{TVDB_ID}}} - S{season_number_str}E{episode_number_str}.{filename_extention}"
+
+    def resub_replace(match):
+        return match.group(0).replace(match.group(1), f"S{season_number_str}E{episode_number_str}")
+
+    new_filename = re.sub(r'[a-zA-Z0-9!\.\?, ]* - ([a-zA-Z0-9]*) +', resub_replace, filename)
+
+    print(new_filename)
+
+    new_file_path = f"{filedir_path}/{new_filename}"
     print(f"new_file_path: {new_file_path}")
 
     # Rename the file finally and hopefully nothing will go wrong :)
