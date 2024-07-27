@@ -1,0 +1,8 @@
+__pycache__
+.secret_notes
+
+test/dl-completed/*
+!test/dl-completed/.gitkeep
+
+test/series-files/*
+!test/series-files/.gitkeep
