@@ -1,6 +1,5 @@
 import tvdb
 import os
-import traceback
 
 def rename_file_with_tvdb_id(BEARER, TVDB_ID, FILE_PATH):
     if not TVDB_ID.isnumeric():
